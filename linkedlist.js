@@ -22,7 +22,16 @@ function createLinkedList() {
 
 
     function prepend(value) {
-        // Implement prepend logic here
+        const newNode = new Node(value);
+
+        if (head === null) {
+            head = newNode;
+        } else {
+            newNode.nextNode = head
+            head = newNode
+        }
+
+        listSize++;
     }
 
     function size() {
@@ -120,75 +129,75 @@ function createLinkedList() {
     }
 
     function toString() {
-        if(listSize === 0 ){
-          return
-        }else{
-        let pointer = head;
-        let toConsole = `( ${pointer.value} ) -> `
-        while (pointer.nextNode !== null) {
-            toConsole = toConsole + `( ${pointer.nextNode.value} ) -> `
-            pointer = pointer.nextNode;
+        if (listSize === 0) {
+            return
+        } else {
+            let pointer = head;
+            let toConsole = `( ${pointer.value} ) -> `
+            while (pointer.nextNode !== null) {
+                toConsole = toConsole + `( ${pointer.nextNode.value} ) -> `
+                pointer = pointer.nextNode;
+            }
+
+            toConsole = toConsole + null
+            return toConsole
+        }
+    }
+
+    function insertAt(value, index) {
+        if (index < 0 || index > listSize) {
+
+            return;
         }
 
-        toConsole = toConsole + null
-        return toConsole
-        }
-    }
+        const newNode = new Node(value);
 
- function insertAt(value, index) {
-    if (index < 0 || index > listSize) {
+        if (index === 0) {
 
-        return;
-    }
+            newNode.nextNode = head;
+            head = newNode;
+        } else {
+            let pointer = head;
+            let prevPointer = null;
+            let currentIndex = 0;
 
-    const newNode = new Node(value);
+            while (currentIndex < index) {
+                prevPointer = pointer;
+                pointer = pointer.nextNode;
+                currentIndex++;
+            }
 
-    if (index === 0) {
-
-        newNode.nextNode = head;
-        head = newNode;
-    } else {
-        let pointer = head;
-        let prevPointer = null;
-        let currentIndex = 0;
-
-        while (currentIndex < index) {
-            prevPointer = pointer;
-            pointer = pointer.nextNode;
-            currentIndex++;
+            newNode.nextNode = pointer;
+            prevPointer.nextNode = newNode;
         }
 
-        newNode.nextNode = pointer;
-        prevPointer.nextNode = newNode;
+        listSize++;
     }
 
-    listSize++;
-}
+    function removeAt(index) {
+        if (index < 0 || index >= listSize) {
+            return;
+        }
 
-function removeAt(index) {
-  if (index < 0 || index >= listSize) {
-    return;
-  }
+        if (index === 0) {
+            // Removing the head of the list
+            head = head.nextNode;
+        } else {
+            let currentIndex = 0;
+            let pointer = head;
+            let prevPointer = null;
 
-  if (index === 0) {
-    // Removing the head of the list
-    head = head.nextNode;
-  } else {
-    let currentIndex = 0;
-    let pointer = head;
-    let prevPointer = null;
+            while (currentIndex < index) {
+                prevPointer = pointer;
+                pointer = pointer.nextNode;
+                currentIndex++;
+            }
 
-    while (currentIndex < index) {
-      prevPointer = pointer;
-      pointer = pointer.nextNode;
-      currentIndex++;
+            prevPointer.nextNode = pointer.nextNode;
+        }
+
+        listSize--;
     }
-
-    prevPointer.nextNode = pointer.nextNode;
-  }
-
-  listSize--;
-}
 
 
     return {
@@ -215,24 +224,3 @@ function Node(value = null, nextNode = null) {
         nextNode: nextNode,
     };
 }
-
-let linkedList = createLinkedList();
-linkedList.append(6);
-linkedList.append(9);
-linkedList.append(8);
-linkedList.append(2);
-
-console.log(linkedList.getHead())
-console.log(linkedList.size())
-console.log(linkedList.getTail())
-console.log(linkedList.find(9))
-console.log(linkedList.toString())
-// linkedList.insertAt(2,2);
-linkedList.removeAt(2)
-console.log(linkedList.toString())
-linkedList.removeAt(2)
-console.log(linkedList.toString())
-linkedList.removeAt(0)
-console.log(linkedList.toString())
-linkedList.removeAt(0)
-console.log(linkedList.toString())
